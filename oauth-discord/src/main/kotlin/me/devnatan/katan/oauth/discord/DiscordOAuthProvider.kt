@@ -17,7 +17,6 @@ class DiscordOAuthProvider(private val katan: Katan) : AbstractOAuthProvider("di
         return true
     }
 
-    // oauth add discord [account username] [discord id]
     override suspend fun wrap(args: Array<out String>): Subscription {
         val username = args.getOrNull(0) ?: error("Must specify Katan account username.")
         val discord = args.getOrNull(1) ?: error("Must specify discord account id.")
@@ -25,7 +24,7 @@ class DiscordOAuthProvider(private val katan: Katan) : AbstractOAuthProvider("di
         val account = katan.accountManager.getAccount(username)
             ?: error("Account $username not found.")
 
-        return DiscordSubscription(account.id, discord)
+        return getSubscription(account.id) ?: DiscordSubscription(account.id, discord)
     }
 
 }
